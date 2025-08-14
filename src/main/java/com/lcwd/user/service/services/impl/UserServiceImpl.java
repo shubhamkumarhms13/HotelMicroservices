@@ -86,7 +86,7 @@ public class UserServiceImpl implements UserService {
                         rating.setHotel(null);
                     }
                     return rating;
-                }).collect(Collectors.toList());
+                }).toList();
         user.setRatings(ratingList);
         return user;
     }
