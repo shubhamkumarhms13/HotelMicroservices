@@ -15,9 +15,9 @@ import java.util.List;
 @Entity
 @Table(name = "micro_users")
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
     @Id
     private String userId;
