@@ -1,4 +1,7 @@
 # Main properties file
+spring:
+  application:
+    name: Configuration
 eureka:
   instance:
     prefer-ip-address: true
