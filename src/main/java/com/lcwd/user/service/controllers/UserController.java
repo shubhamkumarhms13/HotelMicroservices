@@ -25,7 +25,7 @@ public class UserController {
     }
 
     //single user get
-    @GetMapping("/{userId}")
+    @GetMapping(value = "/{userId}", produces = {"application/json", "application/xml"})
     public ResponseEntity<User> getSingleUser(@PathVariable String userId) {
         return Optional.ofNullable(userService.getUser(userId))
                 .map(ResponseEntity::ok)
