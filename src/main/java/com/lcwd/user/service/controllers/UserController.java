@@ -2,14 +2,18 @@ package com.lcwd.user.service.controllers;
 
 import com.lcwd.user.service.entities.User;
 import com.lcwd.user.service.services.UserService;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -25,20 +29,43 @@ public class UserController {
     }
 
     //single user get
-    @GetMapping(value = "/{userId}", produces = {"application/json", "application/xml"})
+    @GetMapping("/{userId}")
+    @CircuitBreaker(name = "ratingHotelBreaker", fallbackMethod = "ratingHotelFallback")
     public ResponseEntity<User> getSingleUser(@PathVariable String userId) {
         return Optional.ofNullable(userService.getUser(userId))
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    //creating fall back method for circuitbreaker
+    public ResponseEntity<User> ratingHotelFallback(String userId, Exception ex){
+        log.info("Fallback is executed because any of the service is down: " + ex.getMessage());
+        User dummyUser = User.builder()
+                .email("dummy@gmail.com")
+                .name("Dummy")
+                .about("Hello ji, mai hu dummy")
+                .userId("c5576c657v7uv8v7vb7ygh").build();
+        return new ResponseEntity<>(dummyUser, HttpStatus.OK);
+    }
+
     //all user get
     @GetMapping
+    @CircuitBreaker(name = "ratingHotelBreaker", fallbackMethod = "ratingHotelFallbackAll")
     public ResponseEntity<List<User>> getAllUser() {
         return Optional.ofNullable(userService.getAllUser())
                 .filter(list -> !list.isEmpty())
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.noContent().build());
+    }
+
+    public ResponseEntity<List<User>> ratingHotelFallbackAll(Exception ex){
+        log.info("Fallback for getAllUser executed because any of the service is down: " + ex.getMessage());
+        User dummyUser = User.builder()
+                .email("dummy@gmail.com")
+                .name("Dummy")
+                .about("Hello ji, mai hu dummy")
+                .userId("c5576c657v7uv8v7vb7ygh").build();
+        return ResponseEntity.ok(Collections.singletonList(dummyUser));
     }
 
     @DeleteMapping("/{userId}")

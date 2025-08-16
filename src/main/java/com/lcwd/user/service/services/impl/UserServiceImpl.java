@@ -13,10 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -39,11 +36,44 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user);
     }
 
+//    @Override
+//    public List<User> getAllUser() {
+//        return userRepository.findAll();
+//    }
     @Override
     public List<User> getAllUser() {
-        return userRepository.findAll();
+        List<User> users = userRepository.findAll();
+        Map<String, Hotel> hotelCache = new HashMap<>();
+        return users.stream().map(user -> {
+            Rating[] ratingsOfUser = restTemplate.getForObject("http://RATING-SERVICE/ratings/users/" + user.getUserId(), Rating[].class);
+
+            if (ratingsOfUser == null || ratingsOfUser.length == 0) {
+                user.setRatings(Collections.emptyList());
+                return user;
+            }
+
+            List<Rating> ratingList = Arrays.stream(ratingsOfUser).map(rating -> {
+                if (rating.getHotelId() == null || rating.getHotelId().isEmpty()) {
+                    rating.setHotel(null);
+                    return rating;
+                }
+
+                Hotel hotel = hotelCache.get(rating.getHotelId());
+                if (hotel == null) {
+                    hotel = hotelService.getHotel(rating.getHotelId());
+                    hotelCache.put(rating.getHotelId(), hotel);
+                }
+
+                rating.setHotel(hotel);
+                return rating;
+            }).toList();
+            user.setRatings(ratingList);
+            return user;
+        }).toList();
     }
 
+
+    //get single user with userID
 //    @Override
 //    public User getUser(String userId) {
 //        User user = userRepository.findById(userId)
@@ -78,12 +108,8 @@ public class UserServiceImpl implements UserService {
                         rating.setHotel(null);
                         return rating;
                     }
-                    try {
                         Hotel hotel = hotelService.getHotel(rating.getHotelId());
                         rating.setHotel(hotel);
-                    } catch (Exception e) {
-                        rating.setHotel(null);
-                    }
                     return rating;
                 }).toList();
         user.setRatings(ratingList);
