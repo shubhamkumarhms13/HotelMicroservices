@@ -18,28 +18,36 @@ public class RatingController {
     private RatingService ratingService;
 
     @PostMapping
-    public ResponseEntity<Rating> createRating(@RequestBody Rating rating){
+    public ResponseEntity<Rating> createRating(@RequestBody Rating rating) {
         return ResponseEntity.status(HttpStatus.CREATED).body(ratingService.createRating(rating));
     }
 
     @GetMapping
-    public ResponseEntity<List<Rating>> getAllRating(){
+    public ResponseEntity<List<Rating>> getAllRating() {
         return Optional.ofNullable(ratingService.getAllRatings())
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping("/users/{userId}")
-    public ResponseEntity<List<Rating>> getAllRatingByUserId(@PathVariable String userId){
+    public ResponseEntity<List<Rating>> getAllRatingByUserId(@PathVariable String userId) {
         return Optional.ofNullable(ratingService.getRatingByUserId(userId))
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping("/hotels/{hotelId}")
-    public ResponseEntity<List<Rating>> getAllRatingByHotelId(@PathVariable String hotelId){
+    public ResponseEntity<List<Rating>> getAllRatingByHotelId(@PathVariable String hotelId) {
         return Optional.ofNullable(ratingService.getRatingByHotelId(hotelId))
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+    @DeleteMapping("/{ratingId}")
+    public ResponseEntity<Rating> deleteRating(@PathVariable String ratingId) {
+        Rating rating = ratingService.deleteRating(ratingId);
+        return ResponseEntity.ok(rating);
+    }
+
+
 }

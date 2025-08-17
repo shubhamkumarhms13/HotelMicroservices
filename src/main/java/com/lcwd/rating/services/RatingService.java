@@ -1,7 +1,6 @@
 package com.lcwd.rating.services;
 
 import com.lcwd.rating.entities.Rating;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -18,4 +17,6 @@ public interface RatingService {
 
     //get all by hotels
     List<Rating> getRatingByHotelId(String hotelId);
+
+    Rating deleteRating(String ratingId);
 }
