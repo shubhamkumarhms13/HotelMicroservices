@@ -7,10 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/hotels")
@@ -43,7 +41,7 @@ public class HotelController {
     }
 
     @DeleteMapping("/{hotelId}")
-    public ResponseEntity<Hotel> deleteUserById(@PathVariable String hotelId){
+    public ResponseEntity<Hotel> deleteUserById(@PathVariable String hotelId) {
         return ResponseEntity.ok(hotelService.deleteUser(hotelId));
     }
 }

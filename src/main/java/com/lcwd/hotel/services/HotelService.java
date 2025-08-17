@@ -1,6 +1,5 @@
 package com.lcwd.hotel.services;
 
-import com.lcwd.hotel.HotelServiceApplication;
 import com.lcwd.hotel.entities.Hotel;
 
 import java.util.List;
@@ -14,7 +13,7 @@ public interface HotelService {
     List<Hotel> getAllHotel();
 
     //single get
-    Hotel getHotel(String id);
+    Hotel getHotel(String hotelId);
 
-    Hotel deleteUser(String id);
+    Hotel deleteUser(String hotelId);
 }
