@@ -1,7 +1,6 @@
 package com.lcwd.user.service.services;
 
 import com.lcwd.user.service.entities.User;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 

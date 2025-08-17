@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user);
     }
 
-//    @Override
+    //    @Override
 //    public List<User> getAllUser() {
 //        return userRepository.findAll();
 //    }
@@ -104,14 +104,14 @@ public class UserServiceImpl implements UserService {
             return user;
         }
         List<Rating> ratingList = Arrays.stream(ratingsOfUser).map(rating -> {
-                    if (rating.getHotelId() == null || rating.getHotelId().isEmpty()) {
-                        rating.setHotel(null);
-                        return rating;
-                    }
-                        Hotel hotel = hotelService.getHotel(rating.getHotelId());
-                        rating.setHotel(hotel);
-                    return rating;
-                }).toList();
+            if (rating.getHotelId() == null || rating.getHotelId().isEmpty()) {
+                rating.setHotel(null);
+                return rating;
+            }
+            Hotel hotel = hotelService.getHotel(rating.getHotelId());
+            rating.setHotel(hotel);
+            return rating;
+        }).toList();
         user.setRatings(ratingList);
         return user;
     }
