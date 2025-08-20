@@ -21,7 +21,6 @@ The system demonstrates service-to-service communication, fault tolerance, and d
 - **Externalised Configuration** →
   - Centralised Spring Cloud Config Server to externalise configuration.
   - All environment-specific properties (dev, test, prod) are stored in Git/Config Repo.
-  - Enables dynamic refresh (@RefreshScope) without restarting services.
 
 ---
 
