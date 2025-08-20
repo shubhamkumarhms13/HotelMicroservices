@@ -18,6 +18,10 @@ The system demonstrates service-to-service communication, fault tolerance, and d
   - Global Exception Handler for consistent responses.  
 - **Service Discovery** → Eureka Server for service registration and discovery.  
 - **Spring Cloud** → For configuration and microservice management.  
+- **Externalised Configuration** →
+  - Centralised Spring Cloud Config Server to externalise configuration.
+  - All environment-specific properties (dev, test, prod) are stored in Git/Config Repo.
+  - Enables dynamic refresh (@RefreshScope) without restarting services.
 
 ---
 
