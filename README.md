@@ -1,6 +1,7 @@
 # 🏨 Hotel Management System - Microservices
 
 This project is a **Microservices-based Hotel Management System**, designed with **Spring Boot, Spring Cloud, and Eureka Server**. Each service runs independently and communicates via REST APIs and Feign Clients. The system demonstrates service-to-service communication, fault tolerance, and distributed architecture.
+
 ---
 
 ## ✨ Features
